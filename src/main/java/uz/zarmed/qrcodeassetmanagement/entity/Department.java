@@ -1,10 +1,7 @@
 package uz.zarmed.qrcodeassetmanagement.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -12,14 +9,12 @@ import java.util.List;
 @Entity
 @Table(name = "departments")
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Department {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false)
-    private Long id;
+public class Department extends BaseEntity {
+
     @Column(nullable = false)
     private String departmentName;
 
@@ -27,11 +22,4 @@ public class Department {
     private String departmentCode;
 
     private String departmentDescription;
-
-    private LocalDateTime createdAt;
-
-    @PrePersist
-    public void prePersist() {
-        this.createdAt = LocalDateTime.now();
-    }
 }

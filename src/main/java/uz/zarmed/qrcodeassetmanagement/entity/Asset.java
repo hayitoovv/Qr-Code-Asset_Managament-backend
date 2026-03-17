@@ -2,14 +2,16 @@ package uz.zarmed.qrcodeassetmanagement.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+
 import uz.zarmed.qrcodeassetmanagement.entity.enums.Condition;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "assasets")
+@Table(name = "assets")
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -43,11 +45,13 @@ public class Asset extends BaseEntity {
     private String room;
 
     private Integer scanCount = 0;
-
     private LocalDateTime lastScanned;
 
-    //  ManyToOne - bir employee ko'p assetga ega bo'lishi mumkin
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "employee_id")
-    private Employee employee;  // NULL bo'lishi mumkin
+    private Employee employee;
+
+    @OneToOne(mappedBy = "asset", cascade = CascadeType.ALL)
+    private QrCode qrCode;
+
 }

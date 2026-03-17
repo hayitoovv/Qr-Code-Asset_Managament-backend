@@ -30,21 +30,10 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Category {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Category extends BaseEntity{
 
     @Column(unique = true, nullable = false)
     private String name;   // "Laptop", "Monitor", "Keyboard"
 
     private String icon;   // "Laptop", "Monitor" - frontend icon nomi
-
-    private LocalDateTime createdAt;
-
-    @PrePersist
-    public void prePersist() {
-        this.createdAt = LocalDateTime.now();
-    }
 }

@@ -59,4 +59,46 @@ public class AuditService {
             log.error("Failed to update audit log",e);
         }
     }
+
+    @Transactional
+    public void logDelete(String entityType, Long entityId, Object entity, String performedBy) {
+        try{
+            AuditLog auditLog = AuditLog.builder()
+                    .entityType(entityType)
+                    .entityId(entityId)
+                    .action("DELETE")
+                    .performedBy(performedBy)
+                    .performedAt(LocalDateTime.now())
+                    .oldValue(objectMapper.writeValueAsString(entity))
+                    .build();
+
+            auditLogRepository.save(auditLog);
+            log.info("Audit log deleted: {} {} by {}" ,entityType,entityId,performedBy);
+
+        }catch (Exception e){
+            log.error("Failed to delete audit log",e);
+        }
+    }
+
+
+    @Transactional
+    public void logRestore(String entityType, Long entityId, Object entity, String performedBy) {
+        try {
+            AuditLog auditLog = AuditLog.builder()
+                    .entityType(entityType)
+                    .entityId(entityId)
+                    .action("RESTORE")
+                    .performedBy(performedBy)
+                    .performedAt(LocalDateTime.now())
+                    .newValue(objectMapper.writeValueAsString(entity))
+                    .build();
+
+            auditLogRepository.save(auditLog);
+            log.info("Audit log restored: {} {} by {}", entityType, entityId, performedBy);
+        } catch (Exception e) {
+            log.error("Failed to restore audit log", e);
+        }
+    }
+
+
 }

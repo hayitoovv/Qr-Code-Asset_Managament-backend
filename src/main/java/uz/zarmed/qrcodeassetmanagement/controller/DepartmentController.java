@@ -2,6 +2,7 @@ package uz.zarmed.qrcodeassetmanagement.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import uz.zarmed.qrcodeassetmanagement.dto.request.DepartmentRequestDto;
 import uz.zarmed.qrcodeassetmanagement.dto.response.DepartmentResponseDto;
@@ -21,6 +22,7 @@ public class DepartmentController {
     // GET /api/departments
     //GET - barcha departmentlar faqat active
     @GetMapping
+    @PreAuthorize("permitAll()")
     public ResponseEntity<List<DepartmentResponseDto>> getAll() {
         List<DepartmentResponseDto> list = departmentService.getAllDepartments();
         if (list.isEmpty()) {
@@ -32,6 +34,7 @@ public class DepartmentController {
     // GET /api/departments/id
     //GEt- bitta department
     @GetMapping("/{id}")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<DepartmentResponseDto> getById(@PathVariable Long id) {
         try{
             return ResponseEntity.ok(departmentService.getDepartmentById(id));
@@ -41,6 +44,7 @@ public class DepartmentController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<DepartmentResponseDto> create(@RequestBody DepartmentRequestDto dto) {
         //soon add security
         String currentUser="admin@company.com";
@@ -50,6 +54,7 @@ public class DepartmentController {
 
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<DepartmentResponseDto> update(@PathVariable Long id,@RequestBody DepartmentRequestDto dto){
         String currentUser="admin@company.com";
         return ResponseEntity.ok(departmentService.updateDepartment(id,dto,currentUser));
@@ -57,11 +62,12 @@ public class DepartmentController {
 
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable Long id){
-        departmentService.deleteDepartment(id);
+        String currentUser="admin@company.com";
+        departmentService.deleteDepartment(id,currentUser);
         return ResponseEntity.noContent().build();
     }
-
 }
 
 

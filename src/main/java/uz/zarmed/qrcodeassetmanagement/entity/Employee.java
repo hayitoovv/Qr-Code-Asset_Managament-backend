@@ -15,10 +15,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Employee {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Employee extends BaseEntity{
 
     @NotBlank
     private String fullName;
@@ -33,12 +30,4 @@ public class Employee {
 
     @ManyToOne(fetch = FetchType.LAZY)
    private Department department;
-
-    private LocalDateTime createdAt;
-
-    @PrePersist
-    public void prePersist() {
-        this.createdAt = LocalDateTime.now();
-    }
-
 }

@@ -2,35 +2,22 @@ package uz.zarmed.qrcodeassetmanagement.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.time.LocalDateTime;
-
 @Entity
 @Table(name = "qr_codes")
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class QrCode {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class QrCode extends BaseEntity {
 
     @Column(unique = true, nullable = false)
-    private String qrCode;        // "AST-2026-00001"
+    private String qrCode;  // AST-2026-00001
 
-    private String qrImageUrl;    // QR image path
+    @Column(length = 1000)
+    private String qrImageUrl;  // /qr-images/AST-2026-00001.png
 
-    // ✅ Faqat QrCode dan Asset ga - bir tomonlama
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "asset_id", unique = true)
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "asset_id", nullable = false)
     private Asset asset;
-
-    private LocalDateTime generatedAt;
-
-    @PrePersist
-    public void prePersist() {
-        this.generatedAt = LocalDateTime.now();
-    }
 }

@@ -16,4 +16,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     List<Employee> findByIsDeletedFalse();
 
     Optional<Employee> findByIdAndIsDeletedFalse(Long id);
+
+    Long countByIsDeletedFalse();
 }

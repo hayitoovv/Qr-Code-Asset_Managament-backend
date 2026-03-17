@@ -46,4 +46,5 @@ public interface AssetRepository extends JpaRepository<Asset, Long> {
             "OR LOWER(a.serialNumber) LIKE LOWER(CONCAT('%', :searchTerm, '%')))")
     List<Asset> searchAssets(@Param("searchTerm") String searchTerm);
 
+    long countByIsDeletedFalse();
 }
